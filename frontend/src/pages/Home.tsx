@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import FlightDetails from "../components/FlightDetails";
+import FlightList from "../components/FlightList";
 
 export interface Flight {
   FlightNo: string;
@@ -17,33 +17,61 @@ export interface Flight {
 
 const Home = () => {
   const [flights, setFlights] = useState<Flight[]>([]);
+  const [filter, setFilter] = useState<"all" | "arrivals" | "departures">(
+    "all"
+  );
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchFlights = async () => {
       try {
-        const response = await fetch("http://localhost:4000/api/flights");
-  
+        let baseUrl = "http://localhost:4000/api/flights";
+        let path = "/";
+
+        if (filter === "arrivals") {
+          path = "/arrivals";
+        } else if (filter === "departures") {
+          path = "/departures";
+        }
+
+        const endpoint = baseUrl + path;
+
+        const response = await fetch(endpoint);
+
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-  
+
         const json = await response.json();
         setFlights(json);
+        setError(null);
       } catch (error) {
         console.error("Error fetching flights:", error);
+        setError(
+          `An error occurred while fetching flights. Please try again later.`
+        );
       }
     };
 
     fetchFlights();
-  }, []);
+  }, [filter]);
+
+  const renderErrorMessage = () => {
+    if (error) {
+      return <div className="error-message">{error}</div>;
+    }
+    return null;
+  };
 
   return (
-    <div className="home">
-      <div className="flights">
-        {flights && flights.map((flight) => (
-          <FlightDetails key={flight.FlightNo} flight={flight}/>
-        ))}
+    <div className="flights">
+      <div className="filter-buttons">
+        <button onClick={() => setFilter("all")}>All Flights</button>
+        <button onClick={() => setFilter("arrivals")}>Arrivals</button>
+        <button onClick={() => setFilter("departures")}>Departures</button>
       </div>
+      {flights && <FlightList flights={flights} filter={filter} />}
+      {error && <div className="flight-details">{renderErrorMessage()}</div>}
     </div>
   );
 };

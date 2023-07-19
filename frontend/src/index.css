@@ -66,3 +66,27 @@ header a {
   border-radius: 50%;
   color: #333;
 }
+.flight-details a {
+  text-decoration: none;
+}
+
+/* filter buttons */
+.filter-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.filter-buttons button {
+  background-color: var(--primary);
+  color: #fff;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.filter-buttons button:hover {
+  background-color: #14996e;
+}
