@@ -1,20 +1,76 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Flight } from "../pages/Home"; // Import the Flight interface
 
-interface FlightListProps {
-  flights: Flight[];
-  filter: "all" | "arrivals" | "departures";
-}
+import { Flight, FlightFilter } from "../types/types";
 
-const FlightList: React.FC<FlightListProps> = ({ flights, filter }) => {
+const FlightList: React.FC<FlightFilter> = ({ filter, searchTerm }) => {
+  const [flights, setFlights] = useState<Flight[]>([]);
+  const [error, setError] = useState<string | null>(null);
+
+  // console.log("FlightList - searchTerm:", searchTerm);
+
+  useEffect(() => {
+    const fetchFlights = async () => {
+      try {
+        let baseUrl = "http://localhost:4000/api/flights";
+        let path = "/";
+
+        if (filter === "arrivals") {
+          path = "/arrivals";
+        } else if (filter === "departures") {
+          path = "/departures";
+        }
+
+        const endpoint = baseUrl + path;
+
+        const response = await fetch(endpoint);
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const json = await response.json();
+        setFlights(json);
+        setError(null);
+      } catch (error) {
+        console.error("Error fetching flights:", error);
+        setError(
+          `An error occurred while fetching flights. Please try again later.`
+        );
+      }
+    };
+
+    fetchFlights();
+  }, [filter]);
+
+  // Filter flights based on searchTerm
+  const filteredFlights = flights.filter((flight) =>
+    flight.Airline.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const noFlightsMessage = (
+    <p className="no-flights-message">
+      No flights found for the given airline.
+    </p>
+  );
+
+  const renderErrorMessage = () => {
+    if (error) {
+      return <p>{error}</p>;
+    }
+    return null;
+  };
+
   return (
-    <div className="flights">
+    <div className="flight-list">
       <h2>
         {filter === "all"
           ? "All Flights"
           : filter.charAt(0).toUpperCase() + filter.slice(1)}
       </h2>
-      {flights.map((flight) => (
+      {error && <div className="error-message">{renderErrorMessage()}</div>}
+      {!error && filteredFlights.length === 0 && noFlightsMessage}
+      {!error && filteredFlights.map((flight) => (
         <div className="flight-details" key={flight.FlightNo}>
           <img src={flight.Image} alt="" />
           <h2>
@@ -26,11 +82,9 @@ const FlightList: React.FC<FlightListProps> = ({ flights, filter }) => {
           <p>{flight.PortOfCallA}</p>
           <p>{flight.Status}</p>
 
-          <div className="filter-buttons">
-            <Link to={`/flight/${flight.FlightNo}`} state={{ filter }}>
-              <button>Details</button>
-            </Link>
-          </div>
+          <Link to={`/flight/${flight.FlightNo}`} state={{ filter }}>
+            <h3 className="details-button">Details</h3>
+          </Link>
         </div>
       ))}
     </div>
