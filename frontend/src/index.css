@@ -85,7 +85,6 @@ header {
   gap: 10px;
   border: 2px solid var(--primary); /* Green border */
   border-radius: 4px;
-  
 }
 
 .filter-input__input {
@@ -102,7 +101,6 @@ header {
   outline: none;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
-
 
 /* Style for the 'Details' heading */
 .details-button {
@@ -121,8 +119,18 @@ header {
   background-color: #d8d8d8; /* Slightly darker grey on hover */
 }
 
-
 .no-flights-message {
+  background: #fff;
+  border-radius: 4px;
+  margin: 20px auto;
+  padding: 20px;
+  position: relative;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.05);
+  font-size: 0.9em;
+  color: #555;
+}
+
+.is-loading-message {
   background: #fff;
   border-radius: 4px;
   margin: 20px auto;
