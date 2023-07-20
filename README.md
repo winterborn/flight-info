@@ -71,7 +71,3 @@ npm test
 ## Acknowledgments
 
 Special thanks to Edinburgh Airport for the `flights.json` data.
-
-```
-
-```
