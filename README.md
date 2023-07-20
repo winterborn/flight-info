@@ -60,7 +60,7 @@ npm start
 
 The frontend will be accessible on `http://localhost:3000`, and it will automatically open in your default web browser.
 
-## Tests
+### Tests
 
 To run tests for the backend, navigate to the backend folder and execute the following command:
 
