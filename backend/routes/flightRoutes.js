@@ -26,14 +26,4 @@ router.post("/", (req, res) => {
   res.json();
 });
 
-// DELETE flight:
-router.delete("/flight/:FlightNo", (req, res) => {
-  res.json();
-});
-
-// UPDATE flight:
-router.patch("/flightS/:FlightNo", (req, res) => {
-  res.json();
-});
-
 module.exports = router;

@@ -51,7 +51,7 @@ const FlightDetails = () => {
         </button>
       </div>
       {error && <div className="flight-details">{renderErrorMessage()}</div>}
-      {flightDetails && (
+      {!error && flightDetails && (
         <div>
           <div className="flight-details">
             <img src={flightDetails.Image} alt="" />

@@ -48,7 +48,7 @@ Start the backend server. From the backend folder:
 npm run dev
 ```
 
-The backend server will run on `http://localhost:4000` (or the port specified in the .env file).
+The backend server will run on `http://localhost:4000`.
 
 Open a new terminal window and navigate to the frontend folder:
 
@@ -68,6 +68,12 @@ To run tests for the backend, navigate to the backend folder and execute the fol
 npm test
 ```
 
+To run tests for the frontend, navigate to the frontend folder and execute the following command:
+
+```
+npm test
+```
+
 ## Acknowledgments
 
-Special thanks to Edinburgh Airport for the `flights.json` data.
+Special thanks to Edinburgh Airport for providing the `flights.json` data.

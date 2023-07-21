@@ -49,10 +49,6 @@ const getFlight = (req, res) => {
   }
 };
 
-// create new flight
-// delete flight
-// update flight
-
 module.exports = {
   getFlights,
   getFlightsArrivals,

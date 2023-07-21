@@ -11,7 +11,7 @@ const Home = () => {
   // console.log("Home - searchTerm:", searchTerm);
 
   return (
-    <div className="homepage">
+    <div className="homepage" data-testid="home-component">
       <div className="filter-buttons">
         <button
           className="filter-buttons__button"

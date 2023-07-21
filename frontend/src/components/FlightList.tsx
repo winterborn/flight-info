@@ -1,18 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, FC } from "react";
 import { Link } from "react-router-dom";
 
 import { Flight, FlightFilter } from "../types/types";
 
-const FlightList: React.FC<FlightFilter> = ({ filter, searchTerm }) => {
+const FlightList: FC<FlightFilter> = ({ filter, searchTerm }) => {
   const [flights, setFlights] = useState<Flight[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isInitialMount, setIsInitialMount] = useState<boolean>(true);
 
   // console.log("FlightList - searchTerm:", searchTerm);
 
   useEffect(() => {
     const fetchFlights = async () => {
-      setLoading(true); // Set loading to true when fetching starts
       try {
         let baseUrl = "http://localhost:4000/api/flights";
         let path = "/";
@@ -32,6 +32,7 @@ const FlightList: React.FC<FlightFilter> = ({ filter, searchTerm }) => {
         }
 
         const json = await response.json();
+
         setFlights(json);
         setError(null);
       } catch (error) {
@@ -40,17 +41,32 @@ const FlightList: React.FC<FlightFilter> = ({ filter, searchTerm }) => {
           `An error occurred while fetching flights. Please try again later.`
         );
       } finally {
-        setLoading(false); // Set loading to false when fetching is done (regardless of success or error)
+        // Set isLoading to false after initial fetch
+        setIsLoading(false);
+        if (isInitialMount) {
+          setIsInitialMount(false);
+        }
       }
     };
 
     fetchFlights();
-  }, [filter]);
+  }, [filter, isInitialMount]);
 
-  // Filter flights based on searchTerm
-  const filteredFlights = flights.filter((flight) =>
-    flight.Airline.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Filter flights based on searchTerm and filter
+  const filteredFlights = flights.filter((flight) => {
+    const airlineMatch = flight.Airline.toLowerCase().includes(
+      searchTerm.toLowerCase()
+    );
+    if (filter === "all") {
+      return airlineMatch;
+    } else if (filter === "arrivals") {
+      return flight.ArrDep === "A" && airlineMatch;
+    } else if (filter === "departures") {
+      return flight.ArrDep === "D" && airlineMatch;
+    } else {
+      return false;
+    }
+  });
 
   const noFlightsMessage = (
     <p className="no-flights-message">
@@ -77,12 +93,20 @@ const FlightList: React.FC<FlightFilter> = ({ filter, searchTerm }) => {
           : filter.charAt(0).toUpperCase() + filter.slice(1)}
       </h2>
       {error && <div className="error-message">{renderErrorMessage()}</div>}
-      {loading && loading && isLoadingMessage}
-      {!error && filteredFlights.length === 0 && noFlightsMessage}
+      {isLoading && isInitialMount && isLoadingMessage}
       {!error &&
-        !loading &&
+        filteredFlights.length === 0 &&
+        !isInitialMount &&
+        noFlightsMessage}
+      {!error &&
+        !isLoading &&
+        !isInitialMount &&
         filteredFlights.map((flight) => (
-          <div className="flight-details" key={flight.FlightNo}>
+          <div
+            data-testid="flight-details"
+            className="flight-details"
+            key={flight.FlightNo}
+          >
             <img src={flight.Image} alt="" />
             <h2>
               {flight.FlightNo} {flight.Airline}
