@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 import { Flight } from "../types/types";
 
-const FlightDetails = () => {
+const FlightDetails: FC = () => {
   const { FlightNo } = useParams();
   const [flightDetails, setFlightDetails] = useState<Flight | null>(null);
   const [error, setError] = useState<string | null>(null);

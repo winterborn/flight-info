@@ -1,4 +1,4 @@
-import { useState, useEffect, FC } from "react";
+import { FC, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import { Flight, FlightFilter } from "../types/types";
