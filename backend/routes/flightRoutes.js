@@ -21,9 +21,4 @@ router.get("/departures", getFlightsDepartures);
 // GET single flight:
 router.get("/flight/:FlightNo", getFlight);
 
-// POST new flight:
-router.post("/", (req, res) => {
-  res.json();
-});
-
 module.exports = router;

@@ -76,7 +76,7 @@ header {
 .filter-input {
   display: flex;
   gap: 10px;
-  border: 2px solid var(--primary); /* Green border */
+  border: 2px solid var(--primary);
   border-radius: 4px;
 }
 
@@ -99,8 +99,7 @@ header {
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Style for the 'Details' heading */
-
+/* details */
 .details-button {
   background-color: #f1f1f1;
   color: #555;
@@ -114,7 +113,7 @@ header {
 }
 
 .details-button:hover {
-  background-color: #d8d8d8; /* Slightly darker grey on hover */
+  background-color: #d8d8d8;
 }
 
 .no-flights-message {
